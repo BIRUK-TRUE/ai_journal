@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JournalProvider extends ChangeNotifier {
+  JournalProvider() {
+    loadEntries();
+  }
   List<JournalEntry> _entries = [];
 
   List<JournalEntry> get entries => _entries;
