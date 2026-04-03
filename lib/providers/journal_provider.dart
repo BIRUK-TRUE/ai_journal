@@ -1,0 +1,36 @@
+import 'package:flutter/foundation.dart';
+import '../models/journal_entry.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class JournalProvider extends ChangeNotifier {
+  List<JournalEntry> _entries = [];
+
+  List<JournalEntry> get entries => _entries;
+  void addEntery(String title, String body) {
+    var newEntry = JournalEntry(title: title, body: body);
+    _entries.add(newEntry);
+    _saveEnteries();
+    notifyListeners();
+  }
+
+  Future<void> _saveEnteries() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> entryList = _entries
+        .map((entry) => jsonEncode(entry.toMap()))
+        .toList();
+    await prefs.setStringList('journal_entries', entryList);
+  }
+
+  Future<void> loadEntries() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? entryList = prefs.getStringList('journal_entries');
+    if (entryList == null) {
+      return;
+    }
+    _entries = entryList
+        .map((entry) => JournalEntry.fromMap(jsonDecode(entry)))
+        .toList();
+    notifyListeners();
+  }
+}
