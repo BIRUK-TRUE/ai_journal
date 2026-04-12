@@ -45,6 +45,7 @@ class _AddEnteryScreenState extends State<AddEnteryScreen> {
                 alignLabelWithHint: true,
               ),
               keyboardType: TextInputType.multiline,
+              // what is the use of this maxLines: 8, textAlignVertical: TextAlignVertical.top, in the textfield? answore: The `maxLines: 8` property allows the TextField to expand vertically up to 8 lines of text, providing more space for the user to write their thoughts. The `textAlignVertical: TextAlignVertical.top` property ensures that the text starts from the top of the TextField, which is especially useful when the TextField is multiline, as it prevents the text from being centered vertically and instead aligns it to the top for a more natural writing experience.
               maxLines: 8,
               textAlignVertical: TextAlignVertical.top,
             ),

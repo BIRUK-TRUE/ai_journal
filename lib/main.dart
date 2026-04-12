@@ -15,3 +15,5 @@ void main() {
     ),
   );
 }
+
+// there is a problem the saredprefernce is not working when i run the app  as desctop app but whenit is run as android app it works what is the proble. answore : The issue you're encountering with SharedPreferences not working in a desktop app is likely due to the fact that SharedPreferences is primarily designed for mobile platforms (Android and iOS) and may not be fully supported or may have limitations when used in desktop applications.
