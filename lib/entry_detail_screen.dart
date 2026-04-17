@@ -5,9 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // there is a proble that when we update the entry and press the edit entry button it gos back to the entry deail page nut the entry in the entry detaile page is not the updated verstion
-class EntryDetailScreen extends StatelessWidget {
+class EntryDetailScreen extends StatefulWidget {
   JournalEntry entry;
   EntryDetailScreen({super.key, required this.entry});
+
+  @override
+  State<EntryDetailScreen> createState() => _EntryDetailScreenState();
+}
+
+class _EntryDetailScreenState extends State<EntryDetailScreen> {
   List<String> months = [
     'January',
     'February',
@@ -22,6 +28,7 @@ class EntryDetailScreen extends StatelessWidget {
     'November',
     'December',
   ];
+
   String getmonth(int month) {
     return months[month - 1];
   }
@@ -36,7 +43,8 @@ class EntryDetailScreen extends StatelessWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddEnteryScreen(entryToEdit: entry),
+                builder: (context) =>
+                    AddEnteryScreen(entryToEdit: widget.entry),
               ),
             ),
             icon: Icon(Icons.edit),
@@ -58,7 +66,7 @@ class EntryDetailScreen extends StatelessWidget {
                         Provider.of<JournalProvider>(
                           context,
                           listen: false,
-                        ).deleteEntry(entry.id);
+                        ).deleteEntry(widget.entry.id);
                         Navigator.pop(context, true);
 
                         Navigator.pop(context);
@@ -86,23 +94,23 @@ class EntryDetailScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  entry.title,
+                  widget.entry.title,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 // SizedBox(width: 24),
                 Row(
                   children: [
-                    Text(getmonth(entry.date.month)),
+                    Text(getmonth(widget.entry.date.month)),
                     SizedBox(width: 3),
-                    Text(entry.date.day.toString()),
+                    Text(widget.entry.date.day.toString()),
                     SizedBox(width: 3),
-                    Text(entry.date.year.toString()),
+                    Text(widget.entry.date.year.toString()),
                   ],
                 ),
               ],
             ),
             SizedBox(height: 16),
-            Text(entry.body),
+            Text(widget.entry.body),
             SizedBox(height: 16),
           ],
         ),
