@@ -46,4 +46,10 @@ class JournalProvider extends ChangeNotifier {
     _saveEnteries();
     notifyListeners();
   }
+
+  void deleteEntry(String id) {
+    _entries.removeWhere((entry) => entry.id == id);
+    _saveEnteries();
+    notifyListeners();
+  }
 }

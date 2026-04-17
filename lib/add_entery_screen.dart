@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 // what is the difference b/n !. and ?.
 class AddEnteryScreen extends StatefulWidget {
   JournalEntry? entryToEdit;
-  AddEnteryScreen({super.key, entryToEdit});
+  AddEnteryScreen({super.key, this.entryToEdit});
 
   @override
   State<AddEnteryScreen> createState() => _AddEnteryScreenState();
@@ -18,6 +18,7 @@ class _AddEnteryScreenState extends State<AddEnteryScreen> {
   @override
   initState() {
     super.initState();
+    // print(widget.entryToEdit);
     titleController = TextEditingController(
       text: widget.entryToEdit == null ? '' : widget.entryToEdit!.title,
     );
@@ -38,8 +39,8 @@ class _AddEnteryScreenState extends State<AddEnteryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: widget.entryToEdit == null
-            ? const Text("Edit Entry")
-            : const Text("New Entry"),
+            ? const Text("New Entry")
+            : const Text("Edit Entry"),
       ),
       body: Padding(
         // added for test purpuse
@@ -69,17 +70,29 @@ class _AddEnteryScreenState extends State<AddEnteryScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
+                final provider = Provider.of<JournalProvider>(
+                  context,
+                  listen: false,
+                );
                 // Here you would typically save the entry to a database or state management solution
                 // For now, we'll just pop back to the previous screen
                 // print(titleController.text);
                 // print(bodyController.text);
-                Provider.of<JournalProvider>(
-                  context,
-                  listen: false,
-                ).addEntery(titleController.text, bodyController.text);
+                widget.entryToEdit == null
+                    ? provider.addEntery(
+                        titleController.text,
+                        bodyController.text,
+                      )
+                    : provider.updateEntry(
+                        widget.entryToEdit!.id,
+                        titleController.text,
+                        bodyController.text,
+                      );
                 Navigator.pop(context);
               },
-              child: Text("Save Entry"),
+              child: widget.entryToEdit == null
+                  ? Text("Save Entry")
+                  : Text("Edit Entry"),
             ),
           ],
         ),
