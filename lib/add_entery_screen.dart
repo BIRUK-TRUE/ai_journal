@@ -1,17 +1,30 @@
+import 'package:ai_journal/models/journal_entry.dart';
 import 'package:ai_journal/providers/journal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// what is the difference b/n !. and ?.
 class AddEnteryScreen extends StatefulWidget {
-  const AddEnteryScreen({super.key});
+  JournalEntry? entryToEdit;
+  AddEnteryScreen({super.key, entryToEdit});
 
   @override
   State<AddEnteryScreen> createState() => _AddEnteryScreenState();
 }
 
 class _AddEnteryScreenState extends State<AddEnteryScreen> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController bodyController = TextEditingController();
+  late TextEditingController titleController;
+  late TextEditingController bodyController;
+  @override
+  initState() {
+    super.initState();
+    titleController = TextEditingController(
+      text: widget.entryToEdit == null ? '' : widget.entryToEdit!.title,
+    );
+    bodyController = TextEditingController(
+      text: widget.entryToEdit == null ? '' : widget.entryToEdit!.body,
+    );
+  }
 
   @override
   void dispose() {
@@ -23,7 +36,11 @@ class _AddEnteryScreenState extends State<AddEnteryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("New Entry")),
+      appBar: AppBar(
+        title: widget.entryToEdit == null
+            ? const Text("Edit Entry")
+            : const Text("New Entry"),
+      ),
       body: Padding(
         // added for test purpuse
         padding: const EdgeInsets.all(8),

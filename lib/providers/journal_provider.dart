@@ -36,4 +36,14 @@ class JournalProvider extends ChangeNotifier {
         .toList();
     notifyListeners();
   }
+
+  void updateEntry(String id, String title, String body) {
+    JournalEntry targetEntrey = _entries.firstWhere(
+      (entery) => entery.id == id,
+    );
+    targetEntrey.title = title;
+    targetEntrey.body = body;
+    _saveEnteries();
+    notifyListeners();
+  }
 }
