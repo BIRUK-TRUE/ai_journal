@@ -1,40 +1,47 @@
 import 'package:ai_journal/add_entery_screen.dart';
-import 'package:ai_journal/models/journal_entry.dart';
+// import 'package:ai_journal/models/journal_entry.dart';
 import 'package:ai_journal/providers/journal_provider.dart';
+import 'package:ai_journal/services/ai_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ai_journal/utils/date_formatter.dart';
 
 // there is a proble that when we update the entry and press the edit entry button it gos back to the entry deail page nut the entry in the entry detaile page is not the updated verstion
 class EntryDetailScreen extends StatefulWidget {
-  JournalEntry entry;
-  EntryDetailScreen({super.key, required this.entry});
+  String entryId;
+  EntryDetailScreen({super.key, required this.entryId});
 
   @override
   State<EntryDetailScreen> createState() => _EntryDetailScreenState();
 }
 
 class _EntryDetailScreenState extends State<EntryDetailScreen> {
-  List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  String? _reflectionText;
+  bool _isLoading = false;
 
-  String getmonth(int month) {
-    return months[month - 1];
+  void _getReflection() async {
+    setState(() {
+      _isLoading = true;
+    });
+    AiService aiService = AiService();
+    final provider = Provider.of<JournalProvider>(context, listen: false);
+    String response = await aiService.getJournalReflection(
+      provider.getEntryById(widget.entryId).body,
+    );
+    setState(() {
+      _reflectionText = response;
+      _isLoading = false;
+    });
+    // print(_reflectionText);
   }
+
+  // String getmonth(int month) {
+  //   return months[month - 1];
+  // }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<JournalProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Entry Detail"),
@@ -43,8 +50,9 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AddEnteryScreen(entryToEdit: widget.entry),
+                builder: (context) => AddEnteryScreen(
+                  entryToEdit: provider.getEntryById(widget.entryId),
+                ),
               ),
             ),
             icon: Icon(Icons.edit),
@@ -66,7 +74,7 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
                         Provider.of<JournalProvider>(
                           context,
                           listen: false,
-                        ).deleteEntry(widget.entry.id);
+                        ).deleteEntry(provider.getEntryById(widget.entryId).id);
                         Navigator.pop(context, true);
 
                         Navigator.pop(context);
@@ -87,32 +95,60 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.entry.title,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                // SizedBox(width: 24),
-                Row(
-                  children: [
-                    Text(getmonth(widget.entry.date.month)),
-                    SizedBox(width: 3),
-                    Text(widget.entry.date.day.toString()),
-                    SizedBox(width: 3),
-                    Text(widget.entry.date.year.toString()),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(widget.entry.body),
-            SizedBox(height: 16),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    provider.getEntryById(widget.entryId).title,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  // SizedBox(width: 24),
+                  Row(
+                    children: [
+                      Text(
+                        getmonth(
+                          provider.getEntryById(widget.entryId).date.month,
+                        ),
+                      ),
+                      SizedBox(width: 3),
+                      Text(
+                        provider
+                            .getEntryById(widget.entryId)
+                            .date
+                            .day
+                            .toString(),
+                      ),
+                      SizedBox(width: 3),
+                      Text(
+                        provider
+                            .getEntryById(widget.entryId)
+                            .date
+                            .year
+                            .toString(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Text(provider.getEntryById(widget.entryId).body),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _getReflection,
+                child: Text("GetAI Reflection"),
+              ),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : _reflectionText != null
+                  ? Text(_reflectionText!)
+                  : SizedBox(height: 10),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

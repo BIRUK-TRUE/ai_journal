@@ -1,6 +1,7 @@
 import 'package:ai_journal/add_entery_screen.dart';
 import 'package:ai_journal/entry_detail_screen.dart';
 import 'package:ai_journal/providers/journal_provider.dart';
+import 'package:ai_journal/utils/date_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -22,19 +23,38 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
             child: Card(
               child: ListTile(
+                isThreeLine: true,
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          EntryDetailScreen(entry: entryList[index]),
+                          EntryDetailScreen(entryId: entryList[index].id),
                     ),
                   );
                 },
                 leading: Icon(Icons.book),
                 trailing: Icon(Icons.arrow_forward_ios),
                 title: Text(entryList[index].title),
-                subtitle: Text(entryList[index].body),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(getmonth(entryList[index].date.month)),
+                        SizedBox(width: 3),
+                        Text(entryList[index].date.day.toString()),
+                        SizedBox(width: 3),
+                        Text(entryList[index].date.year.toString()),
+                      ],
+                    ),
+                    Text(
+                      entryList[index].body.length > 50
+                          ? "${entryList[index].body.substring(0, 51)}..."
+                          : entryList[index].body,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

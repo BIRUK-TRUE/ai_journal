@@ -52,4 +52,8 @@ class JournalProvider extends ChangeNotifier {
     _saveEnteries();
     notifyListeners();
   }
+
+  JournalEntry getEntryById(String id) {
+    return _entries.firstWhere((entry) => entry.id == id);
+  }
 }
