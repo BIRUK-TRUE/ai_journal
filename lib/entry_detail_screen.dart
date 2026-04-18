@@ -59,7 +59,7 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
           ),
           IconButton(
             onPressed: () {
-              showDialog<bool>(
+              showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text("Delete Entry ?"),
@@ -74,7 +74,7 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
                         Provider.of<JournalProvider>(
                           context,
                           listen: false,
-                        ).deleteEntry(provider.getEntryById(widget.entryId).id);
+                        ).deleteEntry(widget.entryId);
                         Navigator.pop(context, true);
 
                         Navigator.pop(context);
@@ -136,16 +136,52 @@ class _EntryDetailScreenState extends State<EntryDetailScreen> {
               ),
               SizedBox(height: 16),
               Text(provider.getEntryById(widget.entryId).body),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _getReflection,
-                child: Text("GetAI Reflection"),
+              SizedBox(height: 24),
+              Text(
+                "AI Reflection",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              _isLoading
-                  ? CircularProgressIndicator()
-                  : _reflectionText != null
-                  ? Text(_reflectionText!)
-                  : SizedBox(height: 10),
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: _getReflection,
+                        child: Text("GetAI Reflection"),
+                      ),
+                      SizedBox(height: 12),
+                      _isLoading
+                          ? CircularProgressIndicator()
+                          : _reflectionText != null
+                          ? Container(
+                              padding: EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                _reflectionText!,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontStyle: FontStyle.italic,
+                                  height: 1.5,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
+                                ),
+                              ),
+                            )
+                          : SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
+
               SizedBox(height: 20),
             ],
           ),

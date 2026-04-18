@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   //  To run a method when a screen first appears, you typically use a lifecycle method called initState() which only exists in StatefulWidget. Since HomeScreen is a StatelessWidget, it does not have the initState() method. If you want to run a method when the HomeScreen first appears, you would need to convert it to a StatefulWidget and then implement the initState() method to call your desired method when the screen is initialized. but in this case we can call the loadEntries() method in the constructor of the JournalProvider, so it will be called when the provider is created and the entries will be loaded when the HomeScreen is first displayed.
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
