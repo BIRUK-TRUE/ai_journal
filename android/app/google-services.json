@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1002562577841",
+    "project_id": "ai-journal-b9002",
+    "storage_bucket": "ai-journal-b9002.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002562577841:android:155464e3aa7578c2840990",
+        "android_client_info": {
+          "package_name": "com.example.ai_journal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbKdZjjjoaWbAvt5FI-xtEV6WDtbrGCRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

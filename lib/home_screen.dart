@@ -27,61 +27,80 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: entryList.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
-            child: Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+      body: entryList.isEmpty
+          ? Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
+                    size: 80,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.3),
+                  ),
+                  const SizedBox(height: 20),
+                  Text("Tap the + button to capture your first thought."),
+                ],
               ),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                isThreeLine: true,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EntryDetailScreen(entryId: entryList[index].id),
+            )
+          : ListView.builder(
+              itemCount: entryList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 12,
+                  ),
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  );
-                },
-                leading: Icon(Icons.book),
-                trailing: Icon(Icons.arrow_forward_ios),
-                title: Text(entryList[index].title),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(getmonth(entryList[index].date.month)),
-                        SizedBox(width: 3),
-                        Text(entryList[index].date.day.toString()),
-                        SizedBox(width: 3),
-                        Text(entryList[index].date.year.toString()),
-                      ],
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      isThreeLine: true,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EntryDetailScreen(entryId: entryList[index].id),
+                          ),
+                        );
+                      },
+                      leading: Icon(Icons.book),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: Text(entryList[index].title),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(getmonth(entryList[index].date.month)),
+                              SizedBox(width: 3),
+                              Text(entryList[index].date.day.toString()),
+                              SizedBox(width: 3),
+                              Text(entryList[index].date.year.toString()),
+                            ],
+                          ),
+                          Text(
+                            entryList[index].body.length > 50
+                                ? "${entryList[index].body.substring(0, 51)}..."
+                                : entryList[index].body,
+                          ),
+
+                          // //////////////////////////
+                        ],
+                      ),
                     ),
-                    Text(
-                      entryList[index].body.length > 50
-                          ? "${entryList[index].body.substring(0, 51)}..."
-                          : entryList[index].body,
-                    ),
-                    // //////////////////////////
-                    Center(child: Column(Chi)),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
