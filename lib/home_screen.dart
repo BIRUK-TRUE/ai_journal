@@ -15,14 +15,34 @@ class HomeScreen extends StatelessWidget {
     final entryList = Provider.of<JournalProvider>(context).entries;
     // context.watch<JournalProvider>().entries; // this is the same as above but with a different syntax in this case listen:true
     return Scaffold(
-      appBar: AppBar(title: const Text("My AI Journal")),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.auto_stories_rounded),
+            SizedBox(width: 8),
+            const Text(
+              "My AI Journal",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+          ],
+        ),
+      ),
       body: ListView.builder(
         itemCount: entryList.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
             child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              clipBehavior: Clip.antiAlias,
               child: ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 isThreeLine: true,
                 onTap: () {
                   Navigator.push(
@@ -53,6 +73,8 @@ class HomeScreen extends StatelessWidget {
                           ? "${entryList[index].body.substring(0, 51)}..."
                           : entryList[index].body,
                     ),
+                    // //////////////////////////
+                    Center(child: Column(Chi)),
                   ],
                 ),
               ),
